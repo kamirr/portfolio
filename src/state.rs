@@ -29,7 +29,7 @@ impl Portfolio {
 	}
 
 	pub fn to_path(&self, path: &std::path::Path) -> crate::Result<()> {
-		let mut file = std::fs::File::open(path)?;
+		let mut file = std::fs::File::create(path)?;
 		self.to_file(&mut file)?;
 
 		Ok(())

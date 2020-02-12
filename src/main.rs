@@ -8,5 +8,5 @@ fn main() {
 	let s = state::State::get();
 	println!("state: {:#?}", s);
 	std::io::stdin().read_line(&mut String::new()).unwrap();
-	s.unwrap().save();
+	s.unwrap().save().unwrap();
 }
