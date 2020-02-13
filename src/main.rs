@@ -10,6 +10,7 @@ pub type Result<T> = std::result::Result<T, error::Error>;
 
 fn main() {
 	use portfolio::Position;
+    use backend::Backend;
 
 	let api_key = "demo".to_owned();
 	let b = backend::world_trading_data::WorldTradingData::new(api_key);
