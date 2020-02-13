@@ -35,38 +35,38 @@ impl WorldTradingData {
 }
 
 impl Backend for WorldTradingData {
-    fn request(&self, positions: &[Position]) -> BulkResponse {
-        let mut result = HashMap::new();
+	fn request(&self, positions: &[Position]) -> BulkResponse {
+		let mut result = HashMap::new();
 
-        for ticker in positions.iter().map(|p| &p.ticker) {
-            result.insert(ticker.clone(), Response::default());
-        }
+		for ticker in positions.iter().map(|p| &p.ticker) {
+			result.insert(ticker.clone(), Response::default());
+		}
 
-        let response = self.make_request(positions);
-        for item in response_to_data_iter(response) {
-            if let Some(symbol) = item["symbol"].as_str() {
-                result
-                    .get_mut(symbol.into())
-                    .map(|p| p.price = get_entry(&item, "price"));
-                result
-                    .get_mut(symbol.into())
-                    .map(|p| p.change_pct = get_entry(&item, "day_change"));
-            }
-        }
+		let response = self.make_request(positions);
+		for item in response_to_data_iter(response) {
+			if let Some(symbol) = item["symbol"].as_str() {
+				result
+					.get_mut(symbol.into())
+					.map(|p| p.price = get_entry(&item, "price"));
+				result
+					.get_mut(symbol.into())
+					.map(|p| p.change_pct = get_entry(&item, "day_change"));
+			}
+		}
 
-        BulkResponse(result)
-    }
+		BulkResponse(result)
+	}
 }
 
 fn response_to_data_iter(response: Value) -> Vec<Value> {
-    response
-        .get("data")
-        .and_then(Value::as_array)
-        .map_or(Vec::new(), Vec::clone)
+	response
+		.get("data")
+		.and_then(Value::as_array)
+		.map_or(Vec::new(), Vec::clone)
 }
 
 fn get_entry(item: &Value, param: &str) -> Option<f32> {
-    item[param]
-        .as_str()
-        .and_then(|s| s.parse::<f32>().ok())
+	item[param]
+		.as_str()
+		.and_then(|s| s.parse::<f32>().ok())
 }
