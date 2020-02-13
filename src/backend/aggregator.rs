@@ -10,9 +10,9 @@ impl Aggregator {
 		Aggregator { backends }
 	}
 
-	pub fn request(&self, state: &State) -> Option<BulkResponse> {
+	pub fn request(&mut self, state: &State) -> Option<BulkResponse> {
 		self.backends
-			.first()
+			.first_mut()
 			.map(|b| b.request(&state.portfolio.positions))
 	}
 }

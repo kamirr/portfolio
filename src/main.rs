@@ -12,6 +12,7 @@ fn main() {
 	use backend::{
 		world_trading_data::WorldTradingData,
 		aggregator::Aggregator,
+		cache::Cache,
 	};
 
 	let state = state::State::get().unwrap();
@@ -19,6 +20,10 @@ fn main() {
 	state.save().unwrap();
 
 	let backend = WorldTradingData::new("demo".to_owned());
-	let aggregator = Aggregator::new(vec![backend]);
+	let cached_backend = Cache::new(backend, std::time::Duration::from_secs(1));
+	let mut aggregator = Aggregator::new(vec![cached_backend]);
+	println!("{:#?}", aggregator.request(&state));
+	println!("{:#?}", aggregator.request(&state));
+	std::thread::sleep(std::time::Duration::from_secs(2));
 	println!("{:#?}", aggregator.request(&state));
 }

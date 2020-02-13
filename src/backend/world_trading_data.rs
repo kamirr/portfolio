@@ -35,7 +35,7 @@ impl WorldTradingData {
 }
 
 impl Backend for WorldTradingData {
-	fn request(&self, positions: &[Position]) -> BulkResponse {
+	fn request(&mut self, positions: &[Position]) -> BulkResponse {
 		let mut result = HashMap::new();
 
 		for ticker in positions.iter().map(|p| &p.ticker) {

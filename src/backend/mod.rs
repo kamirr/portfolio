@@ -1,17 +1,18 @@
 pub mod aggregator;
+pub mod cache;
 pub mod world_trading_data;
 
 use crate::portfolio::Position;
 use std::collections::HashMap;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Response {
 	pub price: Option<f32>,
 	pub change_pct: Option<f32>,
 	pub dividend_yield: Option<f32>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BulkResponse(HashMap<String, Response>);
 
 impl Default for Response {
@@ -25,5 +26,5 @@ impl Default for Response {
 }
 
 pub trait Backend {
-	fn request(&self, positions: &[Position]) -> BulkResponse;
+	fn request(&mut self, positions: &[Position]) -> BulkResponse;
 }
