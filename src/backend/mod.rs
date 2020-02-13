@@ -1,5 +1,6 @@
 pub mod aggregator;
 pub mod cache;
+pub mod iex;
 pub mod world_trading_data;
 
 use crate::portfolio::Position;

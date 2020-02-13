@@ -1,5 +1,3 @@
-#[allow(dead_code)]
-
 mod portfolio;
 mod backend;
 mod state;
@@ -13,15 +11,24 @@ fn main() {
 		world_trading_data::WorldTradingData,
 		aggregator::Aggregator,
 		cache::Cache,
+		iex::{Iex, Caps},
 	};
 
 	let state = state::State::get().unwrap();
 	println!("state: {:#?}", state);
 	state.save().unwrap();
 
-	let backend = WorldTradingData::new("demo".to_owned());
-	let cached_backend = Cache::new(backend, std::time::Duration::from_secs(1));
-	let mut aggregator = Aggregator::new(vec![cached_backend]);
+	let _cached_wtd = Cache::new(
+		WorldTradingData::new("demo".to_owned()),
+		std::time::Duration::from_secs(1)
+	);
+
+	let cached_iex = Cache::new(
+		Iex::new("pk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx".to_owned(), Caps::default().toggle_dividend()),
+		std::time::Duration::from_secs(3600 * 24)
+	);
+
+	let mut aggregator = Aggregator::new(vec![cached_iex]);
 	println!("{:#?}", aggregator.request(&state));
 	println!("{:#?}", aggregator.request(&state));
 	std::thread::sleep(std::time::Duration::from_secs(2));
