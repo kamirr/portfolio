@@ -42,15 +42,19 @@ impl Backend for WorldTradingData {
 			result.insert(ticker.clone(), Response::default());
 		}
 
-		let response = self.make_request(positions);
-		for item in response_to_data_iter(response) {
-			if let Some(symbol) = item["symbol"].as_str() {
-				result
-					.get_mut(symbol.into())
-					.map(|p| p.price = get_entry(&item, "price"));
-				result
-					.get_mut(symbol.into())
-					.map(|p| p.change_pct = get_entry(&item, "day_change"));
+		/* WorldTradingData won't handle more than 5 tickers per request in the free plan; **
+		** TODO: abstract the exact number away                                            */
+		for slice_up_to_5 in positions.chunks(5) {
+			let response = self.make_request(slice_up_to_5);
+			for item in response_to_data_iter(response) {
+				if let Some(symbol) = item["symbol"].as_str() {
+					result
+						.get_mut(symbol.into())
+						.map(|p| p.price = get_entry(&item, "price"));
+					result
+						.get_mut(symbol.into())
+						.map(|p| p.change_pct = get_entry(&item, "day_change"));
+				}
 			}
 		}
 
