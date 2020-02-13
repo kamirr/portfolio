@@ -1,3 +1,4 @@
+pub mod aggregator;
 pub mod world_trading_data;
 
 use crate::portfolio::Position;

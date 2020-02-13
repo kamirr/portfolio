@@ -14,7 +14,7 @@ impl Position {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Portfolio {
-	positions: Vec<Position>
+	pub positions: Vec<Position>
 }
 
 impl Portfolio {

@@ -3,8 +3,8 @@ use crate::portfolio::Portfolio;
 
 #[derive(Debug)]
 pub struct State {
-	paths: Paths,
-	portfolio: Portfolio
+	pub paths: Paths,
+	pub portfolio: Portfolio
 }
 
 impl State {

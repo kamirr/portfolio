@@ -8,8 +8,8 @@ pub struct WorldTradingData {
 }
 
 impl WorldTradingData {
-	pub fn new(api_key: String) -> Self {
-		WorldTradingData { api_key }
+	pub fn new(api_key: String) -> Box<dyn Backend> {
+		Box::new(WorldTradingData { api_key })
 	}
 
 	fn make_request(&self, positions: &[Position]) -> serde_json::Value {
